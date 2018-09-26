@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ember-cli-sentry</title>
+    <link rel="stylesheet" href="./assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="./assets/css/main.css" id="site_styles">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="./index.html">
+                  ember-cli-sentry
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="./modules/ember-cli-sentry_services_raven.html">ember-cli-sentry/services/raven</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="./classes/RavenService.html">RavenService</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 3.0.0
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><h1>ember-cli-sentry</h1>
+<p>An ember-cli addon adding <a href="https://www.getsentry.com">Sentry</a> support.</p>
+<p>Docs are available <a href="http://damiencaselli.github.io/ember-cli-sentry/">here</a>.</p>
+<h2>What it does (and does not)</h2>
+<p>This addon does:</p>
+<ul>
+<li>Enable safe use of Raven.js whether you are in development mode or not.</li>
+<li>Inject a logging service to routes, components, controllers and models to access Raven object.</li>
+<li>Provide a default logger generator that should work for the vast majority of people.</li>
+<li>Provide <code>raven-js</code> in browser.</li>
+<li>Provide rather complete customization.</li>
+</ul>
+<p>This addon does <strong>not</strong>:</p>
+<ul>
+<li>Generate the logging service for you.</li>
+<li>Provide a Sentry key for testing.</li>
+</ul>
+<h2>Install</h2>
+<pre><code>ember install ember-cli-sentry
+</code></pre>
+<p><em>Note: Since <strong>v3.0.0</strong>, <code>raven-js</code> package is automatically included by this addon.</em></p>
+<h2>Configuration</h2>
+<h3>TLDR</h3>
+<pre><code class="language-js">// config/environment.js
+
+module.exports = function(environment) {
+  var ENV = {
+
+    /* config */
+
+    sentry: {
+      dsn: 'https://&lt;dummykey&gt;@app.getsentry.com/&lt;dummyproject&gt;'
+    }
+  }
+}
+</code></pre>
+<h3>Complete config</h3>
+<pre><code class="language-js">// config/environment.js
+
+module.exports = function(environment) {
+  var ENV = {
+
+    /* config */
+
+    sentry: {
+      /**
+       * The only mandatory parameter.
+       *
+       * @type {String}
+       */
+      dsn: 'https://&lt;dummykey&gt;@app.getsentry.com/&lt;dummyproject&gt;',
+
+      /**
+       * Sets Raven.debug property when running <code>Raven.config</code>.
+       *
+       * @type {Boolean}
+       * @default true
+       */
+      debug: true,
+
+      /**
+       * If set to true, it will prevent Raven.js from being initialized.
+       * Errors and logs will be logged to the console (default) instead of
+       * being reported by Raven.
+       *
+       * @type {Boolean}
+       * @default undefined
+       */
+      development: false,
+
+      /**
+       * If set to true, addon will try to have Ember.onerror
+       * and Ember.RSVP.on('error') captured by Raven.
+       *
+       * @type {Boolean}
+       * @default true
+       */
+      globalErrorCatching: true,
+
+      /**
+       * Raven.js option.
+       *
+       * @type {Array}
+       * @default []
+       */
+      includePaths: [],
+
+      /**
+       * Raven.js option.
+       *
+       * @type {Array}
+       * @default []
+       */
+      whitelistUrls: [],
+
+      /**
+       * Options to pass directly to Raven.js. Note: whitelistUrls and
+       * includePaths in this will take precedence
+       * over the above.
+       *
+       * @default {}
+       */
+      ravenOptions: {},
+    }
+  }
+}
+</code></pre>
+<h2>Content Security Policy</h2>
+<p>To allow Ravenjs to work properly, you need to add a couple of thing to the content security policy rules:</p>
+<pre><code>'script-src': &quot;'self' 'unsafe-inline' 'unsafe-eval'&quot;,
+'img-src': &quot;data: app.getsentry.com&quot;,
+'connect-src': &quot;'self' app.getsentry.com&quot;
+</code></pre>
+<h2>Meaningless stack traces?</h2>
+<p>See <a href="https://github.com/damiencaselli/ember-cli-sentry/issues/28">this issue</a>.</p>
+<h2>Example</h2>
+<p>The dummy application in tests is a working example with a couple of logging here and there, and a default logger.</p>
+<h2>Dependencies</h2>
+<p><a href="https://github.com/getsentry/raven-js">Raven.js</a></p>
+<h2>Licence</h2>
+<p><a href="https://raw.githubusercontent.com/damiencaselli/ember-cli-sentry/master/LICENSE.md">MIT</a></p>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="./assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="./assets/js/yui-prettify.js"></script>
+</body>
+</html>

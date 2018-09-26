@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>addon/services/raven.js - ember-cli-sentry</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  ember-cli-sentry
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/ember-cli-sentry_services_raven.html">ember-cli-sentry/services/raven</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/RavenService.html">RavenService</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 3.0.0
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">addon/services/raven.js</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
+
+import Ember from &#x27;ember&#x27;;
+import { assign as _assign, merge } from &#x27;@ember/polyfills&#x27;;
+import Service from &#x27;@ember/service&#x27;;
+import { computed, set } from &#x27;@ember/object&#x27;;
+import { typeOf, isPresent } from &#x27;@ember/utils&#x27;;
+
+import RSVP from &#x27;rsvp&#x27;;
+import Raven from &#x27;raven&#x27;;
+
+// Ember merge is deprecated as of 2.5, but we need to check for backwards
+// compatibility.
+const assign = _assign || merge;
+
+/**
+ * Default available logger service.
+ *
+ * You can simply extend or export this Service to use it in the application.
+ *
+ * @class RavenService
+ * @module ember-cli-sentry/services/raven
+ * @extends Ember.Service
+ */
+export default Service.extend({
+
+  /**
+   * Global error catching definition status
+   *
+   * @property globalErrorCatchingInitialized
+   * @type Boolean
+   * @default false
+   * @private
+   */
+  globalErrorCatchingInitialized: false,
+
+  /**
+   * Message to send to Raven when facing an unhandled
+   * RSVP.Promise rejection.
+   *
+   * @property unhandledPromiseErrorMessage
+   * @type String
+   * @default &#x27;Unhandled Promise error detected&#x27;
+   */
+  unhandledPromiseErrorMessage: &#x27;Unhandled Promise error detected&#x27;,
+
+  /**
+   * Ignore errors if the message matches any string or regex in this list.
+   *
+   * @property ignoreErrors
+   * @type Array
+   */
+  ignoreErrors: [],
+
+  /**
+   * Ignore errors if any of the stack trace file paths matches any string or regex in this list.
+   *
+   * @property ignoreUrls
+   * @type Array
+   */
+  ignoreUrls: [],
+
+  /**
+   * Utility function used internally to check if Raven object
+   * can capture exceptions and messages properly.
+   *
+   * @property isRavenUsable
+   * @type Ember.ComputedProperty
+   */
+  isRavenUsable: computed(function() {
+    return typeof(FastBoot) === &#x27;undefined&#x27; &amp;&amp; Raven.isSetup() === true;
+  }).volatile(),
+
+  /**
+   * Setup &#x60;raven-js&#x60; with the config options.
+   * @param config
+   */
+  setup(config) {
+    const {
+      dsn,
+      environment,
+      debug = true,
+      includePaths = [],
+      whitelistUrls = [],
+      serviceReleaseProperty = &#x27;release&#x27;,
+      ravenOptions = {}
+    } = config.sentry;
+
+    let ignoreErrors = this.get(&#x27;ignoreErrors&#x27;);
+    if (isPresent(ignoreErrors)) {
+      set(ravenOptions, &#x27;ignoreErrors&#x27;, ignoreErrors);
+    }
+
+    set(ravenOptions, &#x27;ignoreUrls&#x27;, this.get(&#x27;ignoreUrls&#x27;));
+
+    try {
+      Raven.debug = debug;
+
+      // Keeping existing config values for includePaths, whitelistUrls, for compatibility.
+      const ravenConfig = assign({
+        environment,
+        includePaths,
+        whitelistUrls,
+        release: this.get(serviceReleaseProperty) || config.APP.version
+      }, ravenOptions);
+
+      Raven.config(dsn, ravenConfig);
+    } catch (e) {
+      Ember.Logger.warn(&#x27;Error during &#x60;sentry&#x60; initialization: &#x27; + e);
+      return;
+    }
+
+    Raven.install();
+
+    const { globalErrorCatching = true } = config.sentry;
+
+    if (globalErrorCatching === true) {
+      this.enableGlobalErrorCatching();
+    }
+  },
+
+  /**
+   * Tries to have Raven capture exception, or throw it.
+   *
+   * @method captureException
+   * @param {Error} error The error to capture
+   * @throws {Error} An error if Raven cannot capture the exception
+   */
+  captureException(error) {
+    if (this.get(&#x27;isRavenUsable&#x27;)) {
+      Raven.captureException(...arguments);
+    } else {
+      throw error;
+    }
+  },
+
+  /**
+   * Tries to have Raven capture message, or send it to console.
+   *
+   * @method captureMessage
+   * @param  {String} message The message to capture
+   * @return {Boolean}
+   */
+  captureMessage(message) {
+    if (this.get(&#x27;isRavenUsable&#x27;)) {
+      Raven.captureMessage(...arguments);
+    } else {
+      throw new Error(message);
+    }
+    return true;
+  },
+
+  /**
+   * Tries to have Raven capture breadcrumb, or log it.
+   *
+   * @method captureBreadcrumb
+   * @param {Object} breadcrumb The breadcrumb to capture
+   */
+  captureBreadcrumb(breadcrumb) {
+    if (this.get(&#x27;isRavenUsable&#x27;)) {
+      Raven.captureBreadcrumb(...arguments);
+    } else {
+      Ember.Logger.info(breadcrumb);
+    }
+  },
+
+  /**
+   * Binds functions to &#x60;Ember.onerror&#x60; and &#x60;Ember.RSVP.on(&#x27;error&#x27;)&#x60;.
+   *
+   * @method enableGlobalErrorCatching
+   * @chainable
+   * @see http://emberjs.com/api/#event_onerror
+   */
+  enableGlobalErrorCatching() {
+    if (this.get(&#x27;isRavenUsable&#x27;) &amp;&amp; !this.get(&#x27;globalErrorCatchingInitialized&#x27;)) {
+      const _oldOnError = Ember.onerror;
+
+      Ember.onerror = (error) =&gt; {
+        if (this._ignoreError(error)) {
+          return;
+        }
+
+        this.captureException(error);
+        this.didCaptureException(error);
+        if (typeof(_oldOnError) === &#x27;function&#x27;) {
+          _oldOnError.call(Ember, error);
+        }
+      };
+
+      RSVP.on(&#x27;error&#x27;, (reason, label) =&gt; {
+        if (this._ignoreError(reason)) {
+          return;
+        }
+
+        if (typeOf(reason) === &#x27;error&#x27;) {
+          this.captureException(reason, {
+            extra: {
+              context: label || this.get(&#x27;unhandledPromiseErrorMessage&#x27;),
+            },
+          });
+          this.didCaptureException(reason);
+        } else {
+          this.captureMessage(this._extractMessage(reason), {
+            extra: {
+              reason,
+              context: label,
+            }
+          });
+        }
+      });
+
+      this.set(&#x27;globalErrorCatchingInitialized&#x27;, true);
+    }
+
+    return this;
+  },
+
+  /**
+   * This private method tries to find a reasonable message when
+   * an unhandled promise does not reject to an error.
+   *
+   * @method _extractMessage
+   * @param  {any} reason
+   * @return {String}
+   */
+  _extractMessage(reason) {
+    const defaultMessage = this.get(&#x27;unhandledPromiseErrorMessage&#x27;);
+    switch (typeOf(reason)) {
+      case &#x27;string&#x27;:
+        return reason;
+      case &#x27;object&#x27;:
+        return reason.message || defaultMessage;
+      default:
+        return defaultMessage;
+    }
+  },
+
+  _ignoreError(error) {
+    // Ember 2.X seems to not catch &#x60;TransitionAborted&#x60; errors caused by regular redirects. We don&#x27;t want these errors to show up in Sentry so we have to filter them ourselfs.
+    // Once the issue https://github.com/emberjs/ember.js/issues/12505 is resolved we can remove this ignored error.
+    if (error &amp;&amp; error.name === &#x27;TransitionAborted&#x27;) { return true; }
+
+    return this.ignoreError(error);
+  },
+
+  /**
+   * Hook that allows for custom behavior when an
+   * error is captured. An example would be to open
+   * a feedback modal.
+   *
+   * @method didCaptureException
+   * @param  {Error} error
+   */
+  didCaptureException() {},
+
+  /**
+   * Hook that allows error filtering in global
+   * error catching methods.
+   *
+   * @method ignoreError
+   * @param  {Error} error
+   * @return {Boolean}
+   */
+  ignoreError() {
+    return false;
+  },
+
+  /**
+   * Runs a Raven method if it is available.
+   *
+   * @param  {String} methodName The method to call
+   * @param  {Array} ...optional Optional method arguments
+   * @return {any} Raven method return value or false
+   * @throws {Error} If an error is captured and thrown
+   */
+  callRaven(methodName, ...optional) {
+    if (this.get(&#x27;isRavenUsable&#x27;)) {
+      try {
+        return Raven[methodName].call(Raven, ...optional);
+      } catch (error) {
+        this.captureException(error);
+        return false;
+      }
+    }
+  }
+});
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

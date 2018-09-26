@@ -1,0 +1,286 @@
+{
+    "project": {
+        "name": "ember-cli-sentry",
+        "description": "Ember.js addon for Sentry",
+        "url": "https://github.com/damiencaselli/ember-cli-sentry",
+        "version": "3.0.0"
+    },
+    "files": {
+        "addon/services/raven.js": {
+            "name": "addon/services/raven.js",
+            "modules": {
+                "ember-cli-sentry/services/raven": 1
+            },
+            "classes": {
+                "RavenService": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "ember-cli-sentry/services/raven": {
+            "name": "ember-cli-sentry/services/raven",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "RavenService": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "addon/services/raven.js",
+            "line": 16,
+            "description": "Default available logger service.\n\nYou can simply extend or export this Service to use it in the application."
+        }
+    },
+    "classes": {
+        "RavenService": {
+            "name": "RavenService",
+            "shortname": "RavenService",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "ember-cli-sentry/services/raven",
+            "file": "addon/services/raven.js",
+            "line": 16,
+            "description": "Default available logger service.\n\nYou can simply extend or export this Service to use it in the application.",
+            "extends": "Ember.Service"
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "addon/services/raven.js",
+            "line": 27,
+            "description": "Global error catching definition status",
+            "itemtype": "property",
+            "name": "globalErrorCatchingInitialized",
+            "type": "Boolean",
+            "default": "false",
+            "access": "private",
+            "tagname": "",
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 37,
+            "description": "Message to send to Raven when facing an unhandled\nRSVP.Promise rejection.",
+            "itemtype": "property",
+            "name": "unhandledPromiseErrorMessage",
+            "type": "String",
+            "default": "'Unhandled Promise error detected'",
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 47,
+            "description": "Ignore errors if the message matches any string or regex in this list.",
+            "itemtype": "property",
+            "name": "ignoreErrors",
+            "type": "Array",
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 55,
+            "description": "Ignore errors if any of the stack trace file paths matches any string or regex in this list.",
+            "itemtype": "property",
+            "name": "ignoreUrls",
+            "type": "Array",
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 63,
+            "description": "Utility function used internally to check if Raven object\ncan capture exceptions and messages properly.",
+            "itemtype": "property",
+            "name": "isRavenUsable",
+            "type": "Ember.ComputedProperty",
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 74,
+            "description": "Setup `raven-js` with the config options.",
+            "params": [
+                {
+                    "name": "config",
+                    "description": ""
+                }
+            ],
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 122,
+            "description": "Tries to have Raven capture exception, or throw it.",
+            "itemtype": "method",
+            "name": "captureException",
+            "params": [
+                {
+                    "name": "error",
+                    "description": "The error to capture",
+                    "type": "Error"
+                }
+            ],
+            "throws": {
+                "description": "An error if Raven cannot capture the exception",
+                "type": "Error"
+            },
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 137,
+            "description": "Tries to have Raven capture message, or send it to console.",
+            "itemtype": "method",
+            "name": "captureMessage",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "The message to capture",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 153,
+            "description": "Tries to have Raven capture breadcrumb, or log it.",
+            "itemtype": "method",
+            "name": "captureBreadcrumb",
+            "params": [
+                {
+                    "name": "breadcrumb",
+                    "description": "The breadcrumb to capture",
+                    "type": "Object"
+                }
+            ],
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 167,
+            "description": "Binds functions to `Ember.onerror` and `Ember.RSVP.on('error')`.",
+            "itemtype": "method",
+            "name": "enableGlobalErrorCatching",
+            "chainable": 1,
+            "see": [
+                "http://emberjs.com/api/#event_onerror"
+            ],
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 218,
+            "description": "This private method tries to find a reasonable message when\nan unhandled promise does not reject to an error.",
+            "itemtype": "method",
+            "name": "_extractMessage",
+            "params": [
+                {
+                    "name": "reason",
+                    "description": "",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 246,
+            "description": "Hook that allows for custom behavior when an\nerror is captured. An example would be to open\na feedback modal.",
+            "itemtype": "method",
+            "name": "didCaptureException",
+            "params": [
+                {
+                    "name": "error",
+                    "description": "",
+                    "type": "Error"
+                }
+            ],
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 256,
+            "description": "Hook that allows error filtering in global\nerror catching methods.",
+            "itemtype": "method",
+            "name": "ignoreError",
+            "params": [
+                {
+                    "name": "error",
+                    "description": "",
+                    "type": "Error"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        },
+        {
+            "file": "addon/services/raven.js",
+            "line": 268,
+            "description": "Runs a Raven method if it is available.",
+            "params": [
+                {
+                    "name": "methodName",
+                    "description": "The method to call",
+                    "type": "String"
+                },
+                {
+                    "name": "optional",
+                    "description": "Optional method arguments",
+                    "type": "Array",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "Raven method return value or false",
+                "type": "Any"
+            },
+            "throws": {
+                "description": "If an error is captured and thrown",
+                "type": "Error"
+            },
+            "class": "RavenService",
+            "module": "ember-cli-sentry/services/raven"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nSetup `raven-js` with the config options.",
+            "line": " addon/services/raven.js:74"
+        },
+        {
+            "message": "Missing item type\nRuns a Raven method if it is available.",
+            "line": " addon/services/raven.js:268"
+        }
+    ]
+}

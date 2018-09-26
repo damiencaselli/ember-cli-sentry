@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>RavenService - ember-cli-sentry</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/yui/3.18.0/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  ember-cli-sentry
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/ember-cli-sentry_services_raven.html">ember-cli-sentry/services/raven</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/RavenService.html">RavenService</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">RavenService</h2>
+              </div>
+              <div class="bd">
+            
+            
+            
+                  <div><a href="#property-summary">Property Summary</a></div>
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_ignoreErrors">ignoreErrors</a></li>
+                      <li><a href="#props_ignoreUrls">ignoreUrls</a></li>
+                      <li><a href="#props_isRavenUsable">isRavenUsable</a></li>
+                      <li><a href="#props_unhandledPromiseErrorMessage">unhandledPromiseErrorMessage</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-properties">Private Properties</a></div>
+                  <ul>
+                      <li><a href="#props_globalErrorCatchingInitialized">globalErrorCatchingInitialized</a></li>
+                  </ul>
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method__extractMessage">_extractMessage</a></li>
+                      <li><a href="#method_captureBreadcrumb">captureBreadcrumb</a></li>
+                      <li><a href="#method_captureException">captureException</a></li>
+                      <li><a href="#method_captureMessage">captureMessage</a></li>
+                      <li><a href="#method_didCaptureException">didCaptureException</a></li>
+                      <li><a href="#method_enableGlobalErrorCatching">enableGlobalErrorCatching</a></li>
+                      <li><a href="#method_ignoreError">ignoreError</a></li>
+                  </ul>
+            
+            
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 3.0.0
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/addon_services_raven.js.html#l16"><code>addon&#x2F;services&#x2F;raven.js:16</code></a></span>
+    <h1 class="class-name">RavenService</h1>
+</div>
+
+
+
+    <div class="class-extends">
+        <h4>Extends:</h4>
+        <div>Ember.Service → RavenService</div>
+    </div>
+
+<div class="class-description"><p>Default available logger service.</p>
+<p>You can simply extend or export this Service to use it in the application.</p>
+</div>
+
+
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_ignoreErrors">ignoreErrors</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a>
+            </div>
+            <div class="short-description">
+              <p>Ignore errors if the message matches any string or regex in this list.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_ignoreUrls">ignoreUrls</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a>
+            </div>
+            <div class="short-description">
+              <p>Ignore errors if any of the stack trace file paths matches any string or regex in this list.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_isRavenUsable">isRavenUsable</a>: Ember.ComputedProperty
+            </div>
+            <div class="short-description">
+              <p>Utility function used internally to check if Raven object can capture exceptions and messages properly.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_unhandledPromiseErrorMessage">unhandledPromiseErrorMessage</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>Message to send to Raven when facing an unhandled RSVP.Promise rejection.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_globalErrorCatchingInitialized">globalErrorCatchingInitialized</a>: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+            </div>
+            <div class="short-description">
+              <p>Global error catching definition status</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method__extractMessage">_extractMessage</a>(reason): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+            </div>
+            <div class="short-description">
+              <p>This private method tries to find a reasonable message when an unhandled promise does not reject to an error.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_captureBreadcrumb">captureBreadcrumb</a>(breadcrumb)
+            </div>
+            <div class="short-description">
+              <p>Tries to have Raven capture breadcrumb, or log it.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_captureException">captureException</a>(error)
+            </div>
+            <div class="short-description">
+              <p>Tries to have Raven capture exception, or throw it.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_captureMessage">captureMessage</a>(message): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+            </div>
+            <div class="short-description">
+              <p>Tries to have Raven capture message, or send it to console.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_didCaptureException">didCaptureException</a>(error)
+            </div>
+            <div class="short-description">
+              <p>Hook that allows for custom behavior when an error is captured. An example would be to open a feedback modal.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_enableGlobalErrorCatching">enableGlobalErrorCatching</a>( )
+            </div>
+            <div class="short-description">
+              <p>Binds functions to <code>Ember.onerror</code> and <code>Ember.RSVP.on('error')</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_ignoreError">ignoreError</a>(error): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+            </div>
+            <div class="short-description">
+              <p>Hook that allows error filtering in global error catching methods.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_ignoreErrors" class="title">
+    <span class="source-link"><a href="../files/addon_services_raven.js.html#l47"><code>addon&#x2F;services&#x2F;raven.js:47</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      ignoreErrors: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Ignore errors if the message matches any string or regex in this list.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_ignoreUrls" class="title">
+    <span class="source-link"><a href="../files/addon_services_raven.js.html#l55"><code>addon&#x2F;services&#x2F;raven.js:55</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      ignoreUrls: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Ignore errors if any of the stack trace file paths matches any string or regex in this list.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_isRavenUsable" class="title">
+    <span class="source-link"><a href="../files/addon_services_raven.js.html#l63"><code>addon&#x2F;services&#x2F;raven.js:63</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      isRavenUsable: Ember.ComputedProperty
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Utility function used internally to check if Raven object
+can capture exceptions and messages properly.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_unhandledPromiseErrorMessage" class="title">
+    <span class="source-link"><a href="../files/addon_services_raven.js.html#l37"><code>addon&#x2F;services&#x2F;raven.js:37</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      unhandledPromiseErrorMessage: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Message to send to Raven when facing an unhandled
+RSVP.Promise rejection.</p>
+</div>
+
+</div>
+    </div>
+
+
+    <div id="properties private">
+        <h2 id="private-properties">Private Properties</h2>
+<div class="property item private">
+  <div id="props_globalErrorCatchingInitialized" class="title">
+    <span class="source-link"><a href="../files/addon_services_raven.js.html#l27"><code>addon&#x2F;services&#x2F;raven.js:27</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      globalErrorCatchingInitialized: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Global error catching definition status</p>
+</div>
+
+</div>
+    </div>
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method__extractMessage" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l218"><code>addon&#x2F;services&#x2F;raven.js:218</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            _extractMessage(reason): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>This private method tries to find a reasonable message when
+an unhandled promise does not reject to an error.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>reason</td>
+              <td>Any</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td> </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+          <span class="return-description"></span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_captureBreadcrumb" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l153"><code>addon&#x2F;services&#x2F;raven.js:153</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            captureBreadcrumb(breadcrumb)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Tries to have Raven capture breadcrumb, or log it.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>breadcrumb</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The breadcrumb to capture</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_captureException" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l122"><code>addon&#x2F;services&#x2F;raven.js:122</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            captureException(error)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Tries to have Raven capture exception, or throw it.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>error</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error" class="crosslink external" target="_blank">Error</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The error to capture</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class="throws">
+        <h4>Throws:</h4>
+        <div>
+          <span class="throws-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error" class="crosslink external" target="_blank">Error</a></span>
+          <span class="throws-description"><p>An error if Raven cannot capture the exception</p>
+</span>
+        </div>
+      </div>
+
+</div>
+<div class="method item">
+    <div id="method_captureMessage" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l137"><code>addon&#x2F;services&#x2F;raven.js:137</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            captureMessage(message): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Tries to have Raven capture message, or send it to console.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>message</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>The message to capture</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+          <span class="return-description"></span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_didCaptureException" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l246"><code>addon&#x2F;services&#x2F;raven.js:246</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            didCaptureException(error)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Hook that allows for custom behavior when an
+error is captured. An example would be to open
+a feedback modal.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>error</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error" class="crosslink external" target="_blank">Error</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td> </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_enableGlobalErrorCatching" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l167"><code>addon&#x2F;services&#x2F;raven.js:167</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            enableGlobalErrorCatching( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Binds functions to <code>Ember.onerror</code> and <code>Ember.RSVP.on('error')</code>.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_ignoreError" class="title">
+        <span class="source-link"><a href="../files/addon_services_raven.js.html#l256"><code>addon&#x2F;services&#x2F;raven.js:256</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            ignoreError(error): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a>
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Hook that allows error filtering in global
+error catching methods.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>error</td>
+              <td><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error" class="crosslink external" target="_blank">Error</a></td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td> </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+          <span class="return-description"></span>
+        </div>
+      </div>
+
+
+</div>
+  </div>
+
+
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

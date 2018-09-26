@@ -1,12 +1,13 @@
 {
   "name": "ember-cli-sentry",
-  "description": "ember-cli-sentry doc",
-  "url": "https://github.com/damiencaselli/ember-cli-sentry/",
+  "description": "Ember.js addon for Sentry",
+  "url": "https://github.com/damiencaselli/ember-cli-sentry",
   "options": {
-    "paths": [
-      "addon",
-      "app"
-    ],
-    "exclude": "tmp,dist,config,public,tests,vendor,node_modules,bower_components"
+    "paths": ["addon", "app"],
+    "exclude": "tmp,dist,config,public,tests,vendor,node_modules",
+    "outdir": "./docs",
+    "themedir": "node_modules/yuidoc-ember-cli-theme",
+    "helpers": ["node_modules/yuidoc-ember-cli-theme/helpers.js"],
+    "linkNatives": true
   }
 }
