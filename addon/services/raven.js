@@ -117,6 +117,8 @@ export default Service.extend({
     if (globalErrorCatching === true) {
       this.enableGlobalErrorCatching();
     }
+
+    this.postSetup();
   },
 
   /**
@@ -180,7 +182,10 @@ export default Service.extend({
           return;
         }
 
-        this.captureException(error);
+        this.captureException(error, {
+          extra: this.getCaptureExtra(error),
+          tags: this.getCaptureTags(error),
+        });
         this.didCaptureException(error);
         if (typeof(_oldOnError) === 'function') {
           _oldOnError.call(Ember, error);
@@ -188,23 +193,25 @@ export default Service.extend({
       };
 
       RSVP.on('error', (reason, label) => {
-        if (this._ignoreError(reason)) {
+        if (this._ignoreReason(reason)) {
           return;
         }
 
         if (typeOf(reason) === 'error') {
           this.captureException(reason, {
-            extra: {
+            extra: assign({}, this.getCaptureExtra(reason), {
               context: label || this.get('unhandledPromiseErrorMessage'),
-            },
+            }),
+            tags: this.getCaptureTags(reason)
           });
           this.didCaptureException(reason);
         } else {
           this.captureMessage(this._extractMessage(reason), {
-            extra: {
+            extra: assign({}, this.getCaptureExtra(reason), {
               reason,
               context: label,
-            }
+            }),
+            tags: this.getCaptureTags(reason)
           });
         }
       });
@@ -236,12 +243,27 @@ export default Service.extend({
   },
 
   _ignoreError(error) {
-    // Ember 2.X seems to not catch `TransitionAborted` errors caused by regular redirects. We don't want these errors to show up in Sentry so we have to filter them ourselfs.
-    // Once the issue https://github.com/emberjs/ember.js/issues/12505 is resolved we can remove this ignored error.
-    if (error && error.name === 'TransitionAborted') { return true; }
-
+    if (this._ignoreTransitionAborted(error)) { return true; }
     return this.ignoreError(error);
   },
+
+  _ignoreReason(reason) {
+    if (this._ignoreTransitionAborted(reason)) { return true; }
+    return this.ignoreReason(reason);
+  },
+
+  _ignoreTransitionAborted(error) {
+    // Ember 2.X seems to not catch `TransitionAborted` errors caused by regular redirects. We don't want these errors to show up in Sentry so we have to filter them ourselfs.
+    // Once the issue https://github.com/emberjs/ember.js/issues/12505 is resolved we can remove this ignored error.
+    return (error && error.name === 'TransitionAborted');
+  },
+
+  /**
+   * Hook that executes after Raven is setup.
+   *
+   * @method postSetup
+   */
+  postSetup() {},
 
   /**
    * Hook that allows for custom behavior when an
@@ -263,6 +285,42 @@ export default Service.extend({
    */
   ignoreError() {
     return false;
+  },
+
+  /**
+ * Hook that allows promise rejection reason filtering
+ * in global error catching methods.
+ *
+ * @method ignoreReason
+ * @param  {Object} reason
+ * @return {Boolean}
+ */
+  ignoreReason() {
+    return false;
+  },
+
+  /**
+   * Hook that gets the extra of each error in global
+   * error catching methods.
+   *
+   * @method getCaptureExtra
+   * @param  {Error} error
+   * @return {Object}
+   */
+  getCaptureExtra() {
+    return {};
+  },
+
+  /**
+   * Hook that gets the tags of each error in global
+   * error catching methods.
+   *
+   * @method getCaptureTags
+   * @param  {Error} error
+   * @return {Object}
+   */
+  getCaptureTags() {
+    return {};
   },
 
   /**
