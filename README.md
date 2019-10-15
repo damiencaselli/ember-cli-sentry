@@ -133,7 +133,18 @@ To allow Ravenjs to work properly, you need to add a couple of thing to the cont
 
 ### Meaningless stack traces?
 
-See [this issue](https://github.com/ember-cli-sentry/ember-cli-sentry/issues/28).
+Ember has disabled source maps by default in production. For more meaningful stack traces, you must manually enable source maps on every environment you're using Sentry.  
+
+```
+// ember-cli-build.js
+
+var app = new EmberApp(defaults, {
+  sourcemaps: {
+    enabled: true
+  }
+});
+```
+This will enable source maps on every environment. See [this EmberCLI documentation](https://ember-cli.com/asset-compilation#source-maps) for more details or enabling source maps for specific environments.
 
 ### Example
 
